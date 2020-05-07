@@ -8,15 +8,23 @@ RUN npm install npm@latest -g
 
 WORKDIR /usr/src/app
 
+COPY package*.json ./
+RUN npm ci --only=production
+
 RUN mkdir png
 RUN mkdir stl
 RUN mkdir scad
+RUN mkdir -p ~/.local/share/fonts/
 
-COPY package*.json ./
-RUN npm ci --only=production
 COPY . .
+
+RUN mv ./kredit/kredit.ttf ~/.local/share/fonts/kredit.ttf
+RUN mv ./kredit/kredit_back.ttf ~/.local/share/fonts/kredit_back.ttf
+RUN mv ./kredit/kredit_front.ttf ~/.local/share/fonts/kredit_front.ttf
+RUN mv ./kredit/kredit_shine.ttf ~/.local/share/fonts/kredit_shine.ttf
+RUN fc-cache -f -v
+RUN fc-list | grep "kredit"
 
 EXPOSE 8080
 CMD [ "node", "index.js" ]
-
 

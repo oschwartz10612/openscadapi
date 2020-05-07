@@ -57,7 +57,7 @@ app.post("/api/png", async (req, res) => {
 
   try {
     await exec(
-      `xvfb-run openscad -o ./png/${filename}.png --colorscheme=${colorscheme} --imgsize ${size} ./scad/${filename}.scad`
+      `xvfb-run -a openscad -o ./png/${filename}.png --colorscheme=${colorscheme} --imgsize ${size} ./scad/${filename}.scad`
     );
   } catch (err) {
     res.status(500);
@@ -130,7 +130,7 @@ app.post("/api/stl", async (req, res) => {
 
   try {
     await exec(
-      `xvfb-run openscad -o ./stl/${filename}.stl ./scad/${filename}.scad`
+      `xvfb-run -a openscad -o ./stl/${filename}.stl ./scad/${filename}.scad`
     );
   } catch (err) {
     res.status(500);
