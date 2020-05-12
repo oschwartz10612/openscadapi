@@ -3,7 +3,7 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
 const mime = require("mime");
-//const cors = require('cors');
+const cors = require('cors');
 const {Storage} = require('@google-cloud/storage')
 
 const keyFilename = "./bitprint-9d203-firebase-adminsdk.json";
@@ -22,10 +22,11 @@ const HOST = "0.0.0.0";
 
 const app = express();
 
-//app.use(cors());
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 
+var error = false;
 var previousPNGFiles = new Array();
 var previousSTLFiles = new Array();
 
@@ -44,6 +45,7 @@ app.post("/api/png", async (req, res) => {
   ) {
     res.status(406);
     res.send("Failed to pass something");
+    error = true;
     return;
   }
 
@@ -62,17 +64,16 @@ app.post("/api/png", async (req, res) => {
   } catch (err) {
     res.status(500);
     res.send(err.stderr);
+    error = true;
     return;
   }
 
   previousPNGFiles.push(filename);
 
-  console.log(previousPNGFiles);
-  
-
   var url = await uploadFile(`./png/${filename}.png`, `png/${filename}.png`).catch((err) => {
     res.status(500);
     res.send(err);
+    error = true;
     return;
   });
 
@@ -86,6 +87,7 @@ app.post("/api/png", async (req, res) => {
             console.error(err);
             res.status(500);
             res.send(err);
+            error = true;
             return;
           }
         });
@@ -94,6 +96,7 @@ app.post("/api/png", async (req, res) => {
             console.error(err);
             res.status(500);
             res.send(err);
+            error = true;
             return;
           }
         });
@@ -104,8 +107,10 @@ app.post("/api/png", async (req, res) => {
     });
   }
 
-  res.status(200);
-  res.json({url: url});
+  if (!error) {
+    res.status(200);
+    res.json({url: url, id: filename});
+  }
 });
 
 app.post("/api/stl", async (req, res) => {
@@ -175,7 +180,7 @@ app.post("/api/stl", async (req, res) => {
   }
 
   res.status(200);
-  res.json({url: url});
+  res.json({url: url, id: filename});
 });
 
 const uploadFile = (filePath, uploadTo) => {

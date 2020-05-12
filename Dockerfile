@@ -14,14 +14,13 @@ RUN npm ci --only=production
 RUN mkdir png
 RUN mkdir stl
 RUN mkdir scad
-RUN mkdir -p ~/.local/share/fonts/
 
 COPY . .
 
-RUN mv ./kredit/kredit.ttf ~/.local/share/fonts/kredit.ttf
-RUN mv ./kredit/kredit_back.ttf ~/.local/share/fonts/kredit_back.ttf
-RUN mv ./kredit/kredit_front.ttf ~/.local/share/fonts/kredit_front.ttf
-RUN mv ./kredit/kredit_shine.ttf ~/.local/share/fonts/kredit_shine.ttf
+RUN mv ./kredit/kredit.ttf /usr/share/fonts/kredit.ttf
+RUN mv ./kredit/kredit_back.ttf /usr/share/fonts/kredit_back.ttf
+RUN mv ./kredit/kredit_front.ttf /usr/share/fonts/kredit_front.ttf
+RUN mv ./kredit/kredit_shine.ttf /usr/share/fonts/kredit_shine.ttf
 RUN fc-cache -f -v
 RUN fc-list | grep "kredit"
 
