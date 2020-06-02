@@ -209,7 +209,7 @@ const uploadFile = (filePath, uploadTo) => {
 };
 
 function createPublicFileURL(storageName) {
-  return `http://storage.googleapis.com/${bucketName}/${encodeURIComponent(
+  return `https://storage.googleapis.com/${bucketName}/${encodeURIComponent(
     storageName
   )}`;
 }
