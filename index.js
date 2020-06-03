@@ -6,7 +6,7 @@ const mime = require("mime");
 const cors = require('cors');
 const {Storage} = require('@google-cloud/storage')
 
-const keyFilename = "./bitprint-9d203-firebase-adminsdk.json";
+const keyFilename = "./firebase_key.json";
 const projectId = "bitprint-9d203";
 const bucketName = `${projectId}.appspot.com`;
 
