@@ -23,10 +23,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - run: 'echo "$FIREBASE_KEY" > firebase_key.json'
-      shell: bash
+    - name: Decrypt Firebase SA
+      run: ./.github/scripts/decrypt_secret.sh
       env:
-        SSH_KEY: ${{secrets.FIREBASE_KEY}}
+        LARGE_SECRET_PASSPHRASE: ${{ secrets.SECRET_PASS }}
 
     # Setup gcloud CLI
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
@@ -50,4 +50,4 @@ jobs:
           --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
           --platform "managed" \
           --allow-unauthenticated \
-          --memory "512Mi"
+          --memory "1Gi"

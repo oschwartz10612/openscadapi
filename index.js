@@ -7,7 +7,7 @@ const cors = require('cors');
 const {Storage} = require('@google-cloud/storage')
 
 const keyFilename = "./firebase_key.json";
-const projectId = "bitprint-9d203";
+const projectId = "bitprint-store";
 const bucketName = `${projectId}.appspot.com`;
 
 const storage = new Storage({
@@ -17,7 +17,7 @@ const storage = new Storage({
 
 const bucket = storage.bucket(bucketName);
 
-const PORT = 8080;
+const PORT = process.env.PORT;
 const HOST = "0.0.0.0";
 
 const app = express();
