@@ -15,6 +15,7 @@ RUN mkdir png
 RUN mkdir stl
 RUN mkdir scad
 
+COPY firebase_key.json .
 COPY . .
 
 RUN mv ./kredit/kredit.ttf /usr/share/fonts/kredit.ttf
