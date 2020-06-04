@@ -1,6 +1,6 @@
 FROM debian:latest
 
-COPY firebase_key.json .
+RUN cp $HOME/firebase_key.json .
 
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends openscad curl
