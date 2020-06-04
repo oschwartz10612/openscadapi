@@ -23,11 +23,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Decrypt Firebase SA
-      run: ./.github/scripts/decrypt_secret.sh
-      env:
-        SECRET_PASS: ${{ secrets.SECRET_PASS }}
-
     # Setup gcloud CLI
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
@@ -50,4 +45,5 @@ jobs:
           --image "gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
           --platform "managed" \
           --allow-unauthenticated \
-          --memory "1Gi"
+          --memory "1Gi" \
+          --service-account "firebase-adminsdk-89rqp@bitprint-store.iam.gserviceaccount.com"

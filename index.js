@@ -6,13 +6,11 @@ const mime = require("mime");
 const cors = require('cors');
 const {Storage} = require('@google-cloud/storage')
 
-const keyFilename = "./firebase_key.json";
 const projectId = "bitprint-store";
 const bucketName = `${projectId}.appspot.com`;
 
 const storage = new Storage({
-  projectId,
-  keyFilename,
+  projectId
 });
 
 const bucket = storage.bucket(bucketName);

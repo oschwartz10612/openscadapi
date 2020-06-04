@@ -1,7 +1,5 @@
 FROM debian:latest
 
-RUN cp $GITHUB_WORKSPACE/firebase_key.json .
-
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends openscad curl
 RUN apt-get install -y xvfb
