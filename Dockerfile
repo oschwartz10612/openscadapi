@@ -1,5 +1,7 @@
 FROM debian:latest
 
+COPY firebase_key.json .
+
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends openscad curl
 RUN apt-get install -y xvfb
@@ -15,7 +17,6 @@ RUN mkdir png
 RUN mkdir stl
 RUN mkdir scad
 
-COPY firebase_key.json .
 COPY . .
 
 RUN mv ./kredit/kredit.ttf /usr/share/fonts/kredit.ttf
