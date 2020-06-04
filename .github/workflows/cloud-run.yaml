@@ -1,9 +1,13 @@
 name: Build and Deploy to Cloud Run
 
 on:
+  # but only for the master branch
   push:
     branches:
-    - master
+      - master
+  pull_request:
+    branches:
+      - master
 
 env:
   PROJECT_ID: ${{ secrets.RUN_PROJECT }}
