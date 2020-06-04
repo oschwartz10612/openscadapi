@@ -19,7 +19,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - run: 'echo "$SSH_KEY" > firebase_key.json'
+    - run: 'echo "$FIREBASE_KEY" > firebase_key.json'
       shell: bash
       env:
         SSH_KEY: ${{secrets.FIREBASE_KEY}}
