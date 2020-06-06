@@ -17,10 +17,7 @@ RUN mkdir scad
 
 COPY . .
 
-RUN mv ./kredit/kredit.ttf /usr/share/fonts/kredit.ttf
-RUN mv ./kredit/kredit_back.ttf /usr/share/fonts/kredit_back.ttf
-RUN mv ./kredit/kredit_front.ttf /usr/share/fonts/kredit_front.ttf
-RUN mv ./kredit/kredit_shine.ttf /usr/share/fonts/kredit_shine.ttf
+RUN mv -v ./kredit/* /usr/share/fonts/
 RUN fc-cache -f -v
 RUN fc-list | grep "kredit"
 

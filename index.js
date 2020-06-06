@@ -3,7 +3,6 @@ const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
 const mime = require("mime");
-const cors = require('cors');
 const {Storage} = require('@google-cloud/storage')
 
 const projectId = "bitprint-store";
@@ -20,13 +19,9 @@ const HOST = "0.0.0.0";
 
 const app = express();
 
-app.use(cors());
-
 app.use(express.urlencoded({ extended: true }));
 
 var error = false;
-var previousPNGFiles = new Array();
-var previousSTLFiles = new Array();
 
 app.post("/api/png", async (req, res) => {
   var colorscheme = req.body.colorscheme;
@@ -66,8 +61,6 @@ app.post("/api/png", async (req, res) => {
     return;
   }
 
-  previousPNGFiles.push(filename);
-
   var url = await uploadFile(`./png/${filename}.png`, `png/${filename}.png`).catch((err) => {
     res.status(500);
     res.send(err);
@@ -75,35 +68,23 @@ app.post("/api/png", async (req, res) => {
     return;
   });
 
-  //delete old files
-  if (previousPNGFiles.length >= 3) {
-    previousPNGFiles.forEach((file) => {
-      if (file != filename) {
-        console.log(`Deleting ${file}`);
-        fs.unlink(`${__dirname}/scad/${file}.scad`, (err) => {
-          if (err) {
-            console.error(err);
-            res.status(500);
-            res.send(err);
-            error = true;
-            return;
-          }
-        });
-        fs.unlink(`${__dirname}/png/${file}.png`, (err) => {
-          if (err) {
-            console.error(err);
-            res.status(500);
-            res.send(err);
-            error = true;
-            return;
-          }
-        });
-        previousPNGFiles.splice(file, 1);
-      } else {
-        console.log(`Skipping current files: ${filename}`);
-      }
-    });
-  }
+  console.log(`Deleting ${filename}`);
+
+  fs.unlink(`${__dirname}/scad/${filename}.scad`, (err) => {
+    if (err) {
+      res.status(500);
+      res.send(err);
+      return;
+    }
+  });
+
+  fs.unlink(`${__dirname}/png/${filename}.png`, (err) => {
+    if (err) {
+      res.status(500);
+      res.send(err);
+      return;
+    }
+  });
 
   if (!error) {
     res.status(200);
@@ -141,41 +122,29 @@ app.post("/api/stl", async (req, res) => {
     return;
   }
 
-  previousSTLFiles.push(filename);
-
   var url = await uploadFile(`./stl/${filename}.stl`, `stl/${filename}.stl`).catch((err) => {
     res.status(500);
     res.send(err);
     return;
   });
 
-  //delete old files
-  if (previousSTLFiles.length >= 3) {
-    previousSTLFiles.forEach((file) => {
-      if (file != filename) {
-        console.log(`Deleting ${file}`);
-        fs.unlink(`${__dirname}/scad/${file}.scad`, (err) => {
-          if (err) {
-            console.error(err);
-            res.status(500);
-            res.send(err);
-            return;
-          }
-        });
-        fs.unlink(`${__dirname}/stl/${file}.stl`, (err) => {
-          if (err) {
-            console.error(err);
-            res.status(500);
-            res.send(err);
-            return;
-          }
-        });
-        previousSTLFiles.splice(file, 1);
-      } else {
-        console.log(`Skipping current files: ${filename}`);
-      }
-    });
-  }
+  console.log(`Deleting ${filename}`);
+
+  fs.unlink(`${__dirname}/scad/${filename}.scad`, (err) => {
+    if (err) {
+      res.status(500);
+      res.send(err);
+      return;
+    }
+  });
+
+  fs.unlink(`${__dirname}/stl/${filename}.stl`, (err) => {
+    if (err) {
+      res.status(500);
+      res.send(err);
+      return;
+    }
+  });
 
   res.status(200);
   res.json({url: url, id: filename});
