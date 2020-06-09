@@ -4,6 +4,7 @@ const exec = util.promisify(require("child_process").exec);
 const fs = require("fs");
 const mime = require("mime");
 const {Storage} = require('@google-cloud/storage')
+var cors = require('cors')
 
 const projectId = "bitprint-store";
 const bucketName = `${projectId}.appspot.com`;
@@ -20,6 +21,12 @@ const HOST = "0.0.0.0";
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
+
+var corsOptions = {
+  origin: ['http://bitprint.io', 'https://bitprint.io', 'http://api.bitprint.io', 'https://api.bitprint.io'],
+  optionsSuccessStatus: 200
+}
+app.use(cors(corsOptions))
 
 var error = false;
 
